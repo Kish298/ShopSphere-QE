@@ -3,7 +3,7 @@ import sys
 import os
 from pathlib import Path
 import pytest
-from core.client.api_client import APIClient
+from core.client.api_client import APIClient    
 
 @pytest.fixture(scope="session")
 def api_client():
@@ -80,3 +80,13 @@ def pytest_sessionfinish(session, exitstatus):
         print(f"  Option 3: brew install allure (macOS with Homebrew)")
     
     print("="*70 + "\n")
+
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item):
+    outcome = yield
+    report = outcome.get_result()
+
+    if report.when == "call" and report.failed:
+        page = item.funcargs.get("page")
+        if page:
+            page.screenshot(path="reports/failure.png")
