@@ -89,4 +89,21 @@ def pytest_runtest_makereport(item):
     if report.when == "call" and report.failed:
         page = item.funcargs.get("page")
         if page:
-            page.screenshot(path="reports/failure.png")
+            page.screenshot(path=f"reports/{item.name}.png")
+
+@pytest.fixture
+def create_post(api_client):
+
+    payload = {
+        "title": "QE automation post",
+        "body": "Created using API",
+        "id": 1
+    }
+
+    response = api_client.send_request(
+        "POST",
+        "/posts",
+        payload
+    )
+
+    return response.json()
