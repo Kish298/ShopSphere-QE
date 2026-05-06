@@ -25,3 +25,4 @@ def test_complete_checkout_flow(page):
     confirmation = checkout.get_confirmation()
 
     assert "Thank you for your order!" in confirmation
+    

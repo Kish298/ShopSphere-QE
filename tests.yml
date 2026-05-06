@@ -1,0 +1,40 @@
+name: Run Automation Tests
+
+on:
+  push:
+    branches: [ main, saucedemo ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
+
+    - name: Install Dependencies
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        pip install -r requirements.txt
+
+    - name: Install Playwright Browsers
+      run: |
+        source venv/bin/activate
+        playwright install
+
+    - name: Run Tests
+      run: |
+        source venv/bin/activate
+        pytest -n 5
+
+    - name: Upload Reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-reports
+        path: reports/
