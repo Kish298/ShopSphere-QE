@@ -38,3 +38,10 @@ jobs:
       with:
         name: test-reports
         path: reports/
+
+    name: Run Performance Tests
+        run: |
+            curl -s https://dl.k6.io/key.gpg | apt-key add -
+            apt-get update
+            apt-get install -y k6
+            k6 run performance/test_posts.js
